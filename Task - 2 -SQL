@@ -1,0 +1,102 @@
+# SQL TASK2 :-
+Tables : 1->Department
+         2->Employee
+
+CREATE TABLE Department(
+dept_id INT PRIMARY KEY,
+dept_name VARCHAR(50)
+);
+
+INSERT INTO Department VALUES
+(1,'HR'),
+(2,'IT'),
+(3,'Sales'),
+(4,'Finance');
+
+SELECT * FROM Department; 
+
+CREATE TABLE Employee(
+emp_id INT PRIMARY KEY,
+emp_name VARCHAR(100),
+salary INT,
+dept_id INT,
+FOREIGN KEY (dept_id)
+REFERENCES Department(dept_id)
+);
+
+INSERT INTO Employee
+(emp_id, emp_name, salary, dept_id, hire_date)
+VALUES
+(101,'Rahul',50000,2,'2026-01-10'),
+(102,'Priya',65000,1,'2026-03-15'),
+(103,'Neha',70000,3,'2026-04-20'),
+(104,'Amit',80000,2,'2026-05-01'),
+(105,'Rahul',50000,2,'2026-06-10');
+
+SELECT * FROM Employee ;
+
+1. Find Highest Salary :-
+SELECT MAX(salary) AS highest_salary FROM Employee;
+Output:
+      80000      
+
+2. Department Wise Employee Count :-
+SELECT dept_id, COUNT(*) AS employee_count FROM Employee GROUP BY dept_id;
+Output:
+      dept_id  employee_count
+          1          1
+          2          3
+
+3. Find Second Highest Salary :-
+SELECT MAX(sal) AS Second_highest FROM Employee WHERE SAL < ( SELECT MAX(sal) FROM Employee);
+Output:
+        Second_highest 
+        70000
+
+4. Employees whose salary > department average salary :-
+SELECT e.emp_name,salary,e.dept_name FROM  Employee e WHERE salary > (SELECT AVG(salary) Department e.emp_id = e.dept_id );
+Output:
+    emp_name	salary	dept_id
+        Neha	70000	103
+        Priya	65000	102
+
+5. Inner join :-
+SELECT e.emp_name, d.dept_name FROM Employee e INNER JOIN Department d ON e.dept_id = d.dept_id;
+Output:
+    emp_name	dept_name
+      Rahul	   IT
+      Priya	   HR
+      Neha	   Sales
+5 .Left Join :-
+SELECT e.emp_name, d.dept_name FROM Employee e LEFT JOIN Department d ON e.dept_id = d.dept_id;
+Output:
+  emp_name	dept_name
+    Rahul	  IT
+    Priya	  HR
+    Neha	  NULL
+6.Group By with Having :-
+SELECT dept_id, COUNT(*) AS employee_count FROM Employee GROUP BY dept_id HAVING COUNT(*) > 2;
+Output:
+   dept_id  employee_count 
+     1              3              
+     2              5              
+
+7.Employees hired in last 6 months :-
+SELECT * FROM Employee WHERE hire_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH);
+Output:
+    emp_id	emp_name	hire_date
+      101 	 Rahul	    2026-03-10
+      102	   Priya	    2026-05-15
+8. Find the Duplicates records :-
+SELECT emp_name, COUNT(*) AS total FROM Employee GROUP BY emp_name HAVING COUNT(*) > 1;
+Output:
+      emp_name	total
+          Rahul	2
+          Priya	3
+9.How to remove the duplicates record :-
+DELETE e1 FROM Employee e1 JOIN Employee e2 ON e1.emp_name = e2.emp_name  AND e1.emp_id > e2.emp_id;
+Output:
+    emp_id	emp_name
+      1	    Rahul
+      2	    Rahul
+      3	    Priya
