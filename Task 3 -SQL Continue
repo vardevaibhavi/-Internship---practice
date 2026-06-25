@@ -1,0 +1,98 @@
+# SQL TASK2 :-
+Tables : 1->Department
+         2->Employee
+
+CREATE TABLE Department(
+dept_id INT PRIMARY KEY,
+dept_name VARCHAR(50)
+);
+
+INSERT INTO Department VALUES
+(1,'HR'),
+(2,'IT'),
+(3,'Sales'),
+(4,'Finance');
+(5,'marketing');
+(6,'payment');
+(7,'testing');
+(8,'deveplopemnt');
+(9,'BOP');
+(10,'Banking');
+
+
+SELECT * FROM Department; 
+
+CREATE TABLE Employee(
+emp_id INT PRIMARY KEY,
+emp_name VARCHAR(100),
+salary INT,
+dept_id INT,
+FOREIGN KEY (dept_id)
+REFERENCES Department(dept_id)
+);
+
+INSERT INTO Employee
+(emp_id, emp_name, salary, dept_id, hire_date)
+VALUES
+(101,'Rahul',50000,2,'2026-01-10'),
+(102,'Priya',65000,1,'2026-03-15'),
+(103,'Neha',70000,3,'2026-04-20'),
+(104,'Amit',80000,2,'2026-05-01'),
+(105,'Rahul',50000,2,'2026-06-10');
+(106,'Tanu',60000,3,'2026-06-11');
+(107,'Ansh',70000,5,'2026-06-12');
+(108,'Rahul',80000,6,'2026-06-13');
+(109,'Rahul',85000,5,'2026-06-14);
+(110,'Rahul',67000,6,'2026-06-15');
+
+SELECT * FROM Employee ;
+
+2. Apply window function on the data :-
+
+1.first_value():-
+->SELECT first_value(salary) OVER (ORDER BY salary DESC) from Employee;
+
+2.LAST_VALUE() :-
+-> SELECT last_value(salary) OVER (ORDER BY salary DESC) FROM Employee;
+
+3.LEAD():-
+->SELECT salary ,LEAD(salary) OVER (ORDER BY salary DESC) FROM Employee;
+
+4.LEG() :-
+->SELECT salary, LAG(salary) OVER (ORDER BY salary) FROM Employee;
+
+5.ROW_NUMBER():-
+->SELECT emp_name, salary,ROW_NUMBER() OVER (ORDER BY salary DESC) FROM Employee;
+
+6.RANK() :-
+->SELECT emp_name, salary,RANK() OVER (ORDER BY salary DESC) FROM Employee;
+
+7.DENSE_RANK() :- 
+-> SELECT emp_name, salary,DENSE_RANK() OVER (ORDER BY salary DESC) FROM Employee;
+
+8.NTILE() :-
+->SELECT salary, NTILE(4) OVER (ORDER BY salary) FROM Employee;
+
+9.AVG()/SUM() OVER() :-
+-> SELECT salary, AVG(salary) OVER () FROM Employee;
+
+* Apply View on the data :- 
+
+CREATE VIEW employee_view AS SELECT emp_name, salary FROM Employee;
+
+SELECT * FROM employee_view;
+
+* Apply Triggers on the data :-
+
+CREATE TRIGGER employee_insert AFTER INSERT ON Employee FOR EACH ROW INSERT INTO LogTable VALUES ('New Employee Added');
+
+* Handle Case When in the data :-
+
+SELECT column_name,
+CASE
+WHEN condition THEN result
+WHEN condition THEN result
+ELSE result
+END
+FROM table_name;
+
