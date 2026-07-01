@@ -1,0 +1,3 @@
+101,tanu,sales,40000
+103,shradha ,hr,40000
+11,tanu,HR,30000
